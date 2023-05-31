@@ -3,6 +3,7 @@ from sklearn.datasets import load_diabetes
 from sklearn.metrics import mean_squared_error, r2_score
 import matplotlib.pyplot as plt
 
+
 def generate_data():
     """
     Generates a random dataset from a normal distribution.
