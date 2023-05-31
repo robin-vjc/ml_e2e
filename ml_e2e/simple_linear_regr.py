@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.metrics import mean_squared_error
 
-from utils import generate_data, evaluate
+from ml_e2e.utils import generate_data, evaluate
 
 
 class SimpleLinearRegression:
