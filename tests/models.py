@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.metrics import mean_squared_error, r2_score
 
 from ml_e2e.simple_linear_regr import SimpleLinearRegression
-from ml_e2e.utils import generate_data, evaluate
+from ml_e2e.utils import evaluate, generate_data
 
 
 def test_sgd_matches_pseudo_inverse_solution():

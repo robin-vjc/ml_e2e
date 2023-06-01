@@ -1,7 +1,10 @@
+import json
+import time
+
 import numpy as np
 from sklearn.metrics import mean_squared_error
 
-from ml_e2e.utils import generate_data, evaluate
+from ml_e2e.utils import ARTIFACTS_PATH, evaluate, generate_data
 
 
 class SimpleLinearRegression:
@@ -33,7 +36,7 @@ class SimpleLinearRegression:
         :param X: The training set
         """
         weights = np.random.normal(size=X.shape[1] + 1)
-        self.W = weights[:X.shape[1]].reshape(-1, X.shape[1])
+        self.W = weights[: X.shape[1]].reshape(-1, X.shape[1])
         self.b = weights[-1]
 
     def __sgd(self, X: np.array, y: np.array, y_hat: np.array) -> None:
@@ -45,8 +48,8 @@ class SimpleLinearRegression:
         """
         n = X.shape[0]
 
-        dW = 2/n * np.sum(X*(y_hat - y), axis=0)
-        db = 2/n * np.sum((y_hat - y), axis=0)
+        dW = 2 / n * np.sum(X * (y_hat - y), axis=0)
+        db = 2 / n * np.sum((y_hat - y), axis=0)
         self.W -= self.lr * dW
         self.b -= self.lr * db
 
@@ -75,13 +78,27 @@ class SimpleLinearRegression:
         :return:
             y_hat: the predicted output
         """
-        y_hat = self.W*X + self.b
+        y_hat = self.W * X + self.b
         return y_hat
+
+    def save(self):
+        """
+        Stores the model weights in artifacts
+        """
+        unix_time = int(time.time())
+        weights_file_path = ARTIFACTS_PATH / "weights" / f"{unix_time}.json"
+        weights = {"W": self.W[0][0], "b": self.b[0]}
+
+        with open(weights_file_path, "w") as f:
+            json.dump(weights, f)
 
 
 if __name__ == "__main__":
     X_train, y_train, X_test, y_test = generate_data()
     model = SimpleLinearRegression()
-    model.fit(X_train,y_train)
+    model.fit(X_train, y_train)
     predicted = model.predict(X_test)
-    evaluate(model, X_test, y_test, predicted)
+    r2 = evaluate(model, X_test, y_test, predicted)
+
+    if r2 >= 0.4:
+        model.save()

@@ -9,8 +9,8 @@
   2. we can adhere to the required API specification (`/stream` and `/batch`)
 * Notable simplifications
   * No load balancer when serving the model
-  * No k8s deployment. We push images to github's registry in CI though, which facilitates deployment to k8s
-  * No model staging; we would usually set a model to staging, test its performance by serving a small fraction of clients (1%) using a load balancer, which we'd rgadually increase (5%, 10% etc). Once we are sure there are no problems (performance regressions, crashes, systems overloads etc..) we'd promote to prod.
+  * No k8s deployment. We push images to Github's registry in CI though, which facilitates deployment to k8s
+  * No model staging; we would usually set a model to staging, test its performance by serving a small fraction of clients (1%) using a load balancer, which we'd gradually increase (5%, 10% etc). Once we are sure there are no problems (performance regressions, crashes, systems overloads etc..) we'd promote to prod.
   * Artifacts are stored on the local FS. We'd usually set up a remote MLFlow server with artifacts stored in s3
 
 
@@ -21,19 +21,18 @@
 ![inference.png](docs/img/inference.png)
 
 
-
 ### ToDos
 
 Phase I:
 
 1. General fixes
 - [x] fix code so that training works
-- [ ] stores weights in ./artifacts/<date>.csv file (or pickle?)
+- [x] stores weights in ./artifacts/<date>.csv file
 - [x] tests: that SGD converges properly on known data
-- [ ] fix dependencies and other code clean ups
+- [x] fix dependencies
 - [x] __init__ is missing docstring
-- [ ] some docstrings aren't correct; generate_data() says it's from a normal distrib
-- [ ] signatures missing everywhere
+- [x] some docstrings aren't correct; generate_data() says it's from a normal distrib
+- [x] signatures missing everywhere
 2. dockerized operation for **training** 
 - [ ] training is executable as a docker container
 3. model serving
@@ -43,7 +42,6 @@ Phase I:
 4. CI
 - [ ] add github actions CI pipeline [run tests; build image]
  
-
 Phase II: MLFlow
 
 - [ ] training stores params, scores and artifacts (train/test sets, and plots) using mlflow
