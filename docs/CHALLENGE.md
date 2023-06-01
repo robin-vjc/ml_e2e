@@ -21,7 +21,7 @@ The following functions need to be filled:
 -  `__sgd`: We will use the Stochastic Gradient Descent Algorithm to optimise the slope and the intercept of our linear function. There are many resources online about SGD, However
 the most important formulas are :
     
-![img.png](img.png)
+![img.png](img/img.png)
 
 Where `n`is the number of sample in the training dataset. 
 
@@ -57,7 +57,7 @@ What are some things that are critical to have versus nice to have?
 
 We are not looking for a highly performant model. The criterion for this exercise is centered on a complete system that works well together and your ability to apply a machine learning inference to a real world use case. The following diagram speaks volumes about the reality of a machine learning engineer.
 
-![img.png](mlsys.png)
+![img.png](img/mlsys.png)
 
 We are more interested in how your overall system works and the ancillary systems and components that are considered and better yet, implemented. As you complete the challenge, try to think about the following assessment criterion:
 
