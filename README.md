@@ -10,7 +10,7 @@
 * Notable simplifications
   * No load balancer when serving the model
   * No k8s deployment. We push images to Github's registry in CI though, which facilitates deployment to k8s
-  * No model staging; we would usually set a model to staging, test its performance by serving a small fraction of clients (1%) using a load balancer, which we'd gradually increase (5%, 10% etc). Once we are sure there are no problems (performance regressions, crashes, systems overloads etc..) we'd promote to prod.
+  * No model staging (we promote directly to prod if performance checks pass); we would usually set a model to staging, test its performance by serving a small fraction of clients (1%) using a load balancer, which we'd gradually increase (5%, 10% etc). Once we are sure there are no problems (performance regressions, crashes, systems overloads etc..) we'd promote to prod.
   * Artifacts are stored on the local FS. We'd usually set up a remote MLFlow server with artifacts stored in s3
 
 
@@ -37,7 +37,8 @@ Start stack (flask server has autoreload)
 docker-compose up web
 ```
 
-### ToDos
+
+## ToDos
 
 Phase I:
 
@@ -50,11 +51,12 @@ Phase I:
 - [x] some docstrings aren't correct; generate_data() says it's from a normal distrib
 - [x] signatures missing everywhere
 2. dockerized operation for **training** 
-- [ ] training is executable as a docker container
+- [x] training is executable as a docker container
 3. model serving
-- [ ] create flask app
-- [ ] load csv/pickle, serve predictions /stream, /batch
-- [ ] make flask app runnable as a docker container
+- [x] create flask app
+- [x] load csv/pickle, serve predictions /stream, /batch
+- [ ] check model predictions work for /stream, document how to make a POST request in README
+- [x] make flask app runnable as a docker container
 4. CI
 - [ ] add github actions CI pipeline [run tests; build image]
  

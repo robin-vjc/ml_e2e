@@ -1,4 +1,5 @@
 import json
+import os
 import time
 
 import numpy as np
@@ -81,7 +82,7 @@ class SimpleLinearRegression:
         y_hat = self.W * X + self.b
         return y_hat
 
-    def save(self):
+    def save_weights(self):
         """
         Stores the model weights in artifacts
         """
@@ -92,6 +93,27 @@ class SimpleLinearRegression:
         with open(weights_file_path, "w", encoding="utf-8") as f:
             json.dump(weights, f)
 
+    def load_weights(self):
+        """
+        Loads the latest weights found in artifacts
+        """
+        weight_files = os.listdir(ARTIFACTS_PATH / "weights")
+        weight_files = sorted(weight_files, reverse=True)
+
+        try:
+            latest_weights = weight_files[0]
+        except IndexError as e:
+            raise IndexError(
+                "Unable to locate stored model weights in artifacts. Have you run the training pipeline yet?"
+            ) from e
+
+        latest_weights_path = ARTIFACTS_PATH / "weights" / latest_weights
+        with open(latest_weights_path, "r") as f:
+            weights = json.load(f)
+
+        self.W = np.array([[weights["W"]]])
+        self.b = np.array([weights["b"]])
+
 
 if __name__ == "__main__":
     X_train, y_train, X_test, y_test = generate_data()
@@ -101,4 +123,4 @@ if __name__ == "__main__":
     r2 = evaluate(model, X_test, y_test, predicted)
 
     if r2 >= 0.4:
-        model.save()
+        model.save_weights()

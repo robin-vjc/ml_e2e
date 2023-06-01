@@ -45,3 +45,11 @@ def test_model_performance_on_known_dataset():
 
     assert r2 >= 0.47
     assert mse <= 2565
+
+
+def test_that_loading_weights_works():
+    model = SimpleLinearRegression()
+    model.load_weights()
+
+    assert 920 <= model.W <= 940
+    assert 151 <= model.b <= 153
