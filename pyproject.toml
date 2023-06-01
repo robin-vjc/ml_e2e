@@ -1,0 +1,24 @@
+[tool.pylint.'MESSAGES CONTROL']
+disable = [
+    "attribute-defined-outside-init",
+    "duplicate-code",
+    "super-init-not-called",
+    "missing-docstring",
+    "missing-module-docstring",
+    "missing-class-docstring",
+    "protected-access",
+    "no-member",
+    "too-few-public-methods",
+    "import-error",
+    "fixme",
+    "bad-continuation",
+    "ungrouped-imports",
+    "invalid-name",  # ML code makes heavy use of variables names like "X_train"
+]
+
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore:BlackItem is an Item subclass and should not be a collector, however its bases File are collectors.",
+]

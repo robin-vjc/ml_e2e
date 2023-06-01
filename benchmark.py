@@ -32,9 +32,9 @@ diabetes_y_pred = regr.predict(diabetes_X_test)
 # The coefficients
 print("Coefficients: \n", regr.coef_)
 # The mean squared error
-print("Mean squared error: %.2f" % mean_squared_error(diabetes_y_test, diabetes_y_pred))
+print(f"Mean squared error: {mean_squared_error(diabetes_y_test, diabetes_y_pred):.2f}")
 # The coefficient of determination: 1 is perfect prediction
-print("Coefficient of determination: %.2f" % r2_score(diabetes_y_test, diabetes_y_pred))
+print(f"Coefficient of determination: {r2_score(diabetes_y_test, diabetes_y_pred):.2f}")
 
 # Plot outputs
 plt.scatter(diabetes_X_test, diabetes_y_test, color="black")

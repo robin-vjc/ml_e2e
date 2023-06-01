@@ -1,0 +1,24 @@
+services:
+  test:
+    # command: tail -F keep_alive
+    build:
+      context: "."
+      target: "test"
+
+  web:
+    build:
+      context: "."
+      target: "web"
+    image: ghcr.io/robin-vjc/e2e_ml_endeavour
+    healthcheck:
+      test: "curl localhost:8000/health"
+      interval: "60s"
+      timeout: "3s"
+      start_period: "5s"
+      retries: 3
+    ports:
+      - "8000:8000"
+    tty: true
+    # command: tail -F keep_alive
+    volumes:
+      - ".:/app/"

@@ -20,6 +20,22 @@
 ### Inference
 ![inference.png](docs/img/inference.png)
 
+## Running locally
+
+Build the project images:
+```bash
+docker-compose build
+```
+
+Run tests (includes detection of linting issues)
+```bash
+docker-compose run test
+```
+
+Start stack (flask server has autoreload)
+```bash
+docker-compose up web
+```
 
 ### ToDos
 

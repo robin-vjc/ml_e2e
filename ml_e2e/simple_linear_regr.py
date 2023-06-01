@@ -89,7 +89,7 @@ class SimpleLinearRegression:
         weights_file_path = ARTIFACTS_PATH / "weights" / f"{unix_time}.json"
         weights = {"W": self.W[0][0], "b": self.b[0]}
 
-        with open(weights_file_path, "w") as f:
+        with open(weights_file_path, "w", encoding="utf-8") as f:
             json.dump(weights, f)
 
 

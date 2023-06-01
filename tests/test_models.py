@@ -7,9 +7,10 @@ from ml_e2e.utils import evaluate, generate_data
 
 def test_sgd_matches_pseudo_inverse_solution():
     """
-    Since the dataset used in these tests fits in memory, we can find the optimal fit directly by computing the pseudo inverse
+    Since the dataset used in these tests fits in memory, we can find the optimal fit directly by
+    computing the pseudo inverse.
     """
-    X_train, y_train, X_test, y_test = generate_data()
+    X_train, y_train, _, _ = generate_data()
     A = np.hstack([X_train, np.ones((X_train.shape[0], 1))])
     W_star, b_star = np.linalg.lstsq(A, y_train, rcond=None)[0]
 
