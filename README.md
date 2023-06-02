@@ -68,7 +68,7 @@ Model Registry:
 
 ## Running locally (no docker)
 
-it is recommended to work with the docker setup above. However, it is possible to install this project as an editable 
+It is recommended to work with the docker setup above. However, it is possible to install this project as an editable 
 package for quick local iterations:
 ```bash
 pip install -e .

@@ -29,7 +29,7 @@ def train_model():
         if performance_check(scores):
             model_path = f"slr-{run.info.run_uuid}"
             reg_model_name = "SimpleLinearRegression"
-            mlflow_model = SLRWrapper(model=model)
+            mlflow_model = SLRWrapper(slr_model=model)
 
             # save artifacts
             mlflow.pyfunc.save_model(
@@ -44,12 +44,15 @@ def train_model():
                 registered_model_name=reg_model_name,
             )
 
-            # get registered version and promote to prod
-            client = mlflow.tracking.MlflowClient()
-            latest_version = client.get_latest_versions(reg_model_name)[-1].version
-            client.transition_model_version_stage(
-                name=reg_model_name, version=latest_version, stage="Production"
-            )
+            promote_latest_version_to_prod(model_name=reg_model_name)
+
+
+def promote_latest_version_to_prod(model_name: str) -> None:
+    client = mlflow.tracking.MlflowClient()
+    latest_version = client.get_latest_versions(model_name)[-1].version
+    client.transition_model_version_stage(
+        name=model_name, version=latest_version, stage="Production"
+    )
 
 
 def performance_check(scores: Dict[str, float]) -> bool:

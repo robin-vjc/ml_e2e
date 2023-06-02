@@ -117,8 +117,8 @@ class SimpleLinearRegression:
 
 
 class SLRWrapper(mlflow.pyfunc.PythonModel):
-    def __init__(self, model: SimpleLinearRegression):
-        self.model = model
+    def __init__(self, slr_model: SimpleLinearRegression):
+        self.model = slr_model
 
     def predict(self, context, model_input) -> np.array:
         return self.model.predict(model_input)
