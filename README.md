@@ -20,7 +20,7 @@
 ### Inference
 ![inference.png](docs/img/inference.png)
 
-## Running locally
+## Running locally (docker)
 
 Build the project images:
 ```bash
@@ -35,6 +35,30 @@ docker-compose run test
 Start stack (flask server has autoreload)
 ```bash
 docker-compose up web
+```
+
+Check that the stack is working correctly by requesting a prediction
+```python
+import requests
+
+# test /stream
+X_request = {'X': 0.2}
+r = requests.post("http://localhost:8000/stream", json=X_request)
+print(r.json())
+
+# test /batch
+X_request = {'X': [0.2, 0.5, -0.1]}
+r = requests.post("http://localhost:8000/batch", json=X_request)
+print(r.json())
+```
+
+
+## Running locally (no docker)
+
+it is recommended to work with the docker setup above. However, it is possible to install this project as an editable 
+package for quick local iterations:
+```bash
+pip install -e .
 ```
 
 
@@ -55,10 +79,11 @@ Phase I:
 3. model serving
 - [x] create flask app
 - [x] load csv/pickle, serve predictions /stream, /batch
-- [ ] check model predictions work for /stream, document how to make a POST request in README
+- [x] check model predictions work for /stream, document how to make a POST request in README
 - [x] make flask app runnable as a docker container
 4. CI
-- [ ] add github actions CI pipeline [run tests; build image]
+- [x] make project pip installable
+- [x] add github actions CI pipeline [run tests; build image]
  
 Phase II: MLFlow
 

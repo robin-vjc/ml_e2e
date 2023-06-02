@@ -11,11 +11,25 @@ def stream():
     model = SimpleLinearRegression()
     model.load_weights()
 
-    x_req = request.form.get('x')
-    X_test = np.array([[x_req]])
-    y_test_hat = model.predict(X_test)
+    X_req = request.json["X"]
+    X_req = np.array([[X_req]])
 
-    return {"result": y_test_hat}, 200
+    y_pred = model.predict(X_req)
+
+    return {"result": y_pred[0][0]}, 200
+
+
+@app.route("/batch", methods=["POST"])
+def batch():
+    model = SimpleLinearRegression()
+    model.load_weights()
+
+    X_req = request.json["X"]
+    X_req = np.array([X_req])
+    y_pred = model.predict(X_req)
+    y_pred = y_pred[0].tolist()
+
+    return {"result": y_pred}, 200
 
 
 @app.route("/health")

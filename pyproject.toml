@@ -1,3 +1,10 @@
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore:BlackItem is an Item subclass and should not be a collector, however its bases File are collectors.",
+]
+
 [tool.pylint.'MESSAGES CONTROL']
 disable = [
     "attribute-defined-outside-init",
@@ -16,9 +23,5 @@ disable = [
     "invalid-name",  # ML code makes heavy use of variables names like "X_train"
 ]
 
-[tool.pytest.ini_options]
-filterwarnings = [
-    "ignore::DeprecationWarning",
-    "ignore::PendingDeprecationWarning",
-    "ignore:BlackItem is an Item subclass and should not be a collector, however its bases File are collectors.",
-]
+[tool.pylint.'FORMAT']
+max-line-length=120

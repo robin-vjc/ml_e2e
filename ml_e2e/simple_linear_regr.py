@@ -82,7 +82,7 @@ class SimpleLinearRegression:
         y_hat = self.W * X + self.b
         return y_hat
 
-    def save_weights(self):
+    def save_weights(self) -> None:
         """
         Stores the model weights in artifacts
         """
@@ -93,7 +93,7 @@ class SimpleLinearRegression:
         with open(weights_file_path, "w", encoding="utf-8") as f:
             json.dump(weights, f)
 
-    def load_weights(self):
+    def load_weights(self) -> None:
         """
         Loads the latest weights found in artifacts
         """
@@ -108,7 +108,7 @@ class SimpleLinearRegression:
             ) from e
 
         latest_weights_path = ARTIFACTS_PATH / "weights" / latest_weights
-        with open(latest_weights_path, "r") as f:
+        with open(latest_weights_path, "r", encoding="utf-8") as f:
             weights = json.load(f)
 
         self.W = np.array([[weights["W"]]])
