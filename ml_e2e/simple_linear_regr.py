@@ -2,13 +2,14 @@ import json
 import os
 import time
 
+import mlflow
 import numpy as np
 from sklearn.metrics import mean_squared_error
 
-from ml_e2e.utils import ARTIFACTS_PATH, evaluate, generate_data
+from ml_e2e.utils import ARTIFACTS_PATH, evaluate, generate_data, get_scores
 
 
-class SimpleLinearRegression:
+class SimpleLinearRegression():
     def __init__(self, iterations: int = 15000, lr: float = 0.1):
         """
         A linear regression model trained with SGD.
@@ -115,12 +116,21 @@ class SimpleLinearRegression:
         self.b = np.array([weights["b"]])
 
 
+class SLRWrapper(mlflow.pyfunc.PythonModel):
+    def __init__(self, model: SimpleLinearRegression):
+        self.model = model
+
+    def predict(self, context, model_input) -> np.array:
+        return self.model.predict(model_input)
+
+
 if __name__ == "__main__":
     X_train, y_train, X_test, y_test = generate_data()
     model = SimpleLinearRegression()
     model.fit(X_train, y_train)
     predicted = model.predict(X_test)
-    r2 = evaluate(model, X_test, y_test, predicted)
+    evaluate(model, X_test, y_test, predicted)
+    scores = get_scores(y_test, predicted)
 
-    if r2 >= 0.4:
+    if scores["r2"] >= 0.4:
         model.save_weights()

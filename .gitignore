@@ -3,3 +3,8 @@ sol_*.py
 *.pytest_cache
 *.egg-info
 .coverage
+mlflow.db
+
+# ignore all artifacts except fallback weights
+artifacts
+!artifacts/weights

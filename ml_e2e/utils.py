@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Tuple
+from typing import Tuple, Dict
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -41,19 +41,29 @@ def generate_data() -> Tuple[np.array, np.array, np.array, np.array]:
     return diabetes_X_train, diabetes_y_train, diabetes_X_test, diabetes_y_test
 
 
-def evaluate(model, X: np.array, y: np.array, y_predicted: np.array) -> float:
+def get_scores(y: np.array, y_predicted: np.array) -> Dict[str, float]:
+    r2 = r2_score(y, y_predicted)
+    mse = mean_squared_error(y, y_predicted)
+    rmse = mean_squared_error(y, y_predicted, squared=False)
+
+    return {"r2": r2, "mse": mse, "rmse": rmse}
+
+
+def evaluate(model, X: np.array, y: np.array, y_predicted: np.array) -> None:
     """
     Calculates evaluation metrics, print them along with a plot showing the fitted model.
     Returns:
-        r2: R2 score of the predicted outputs
+        scores: mse and R2 score of the predicted outputs
     """
     # The coefficients
     print(f"Slope: {model.W}; Intercept: {model.b}")
+
+    scores = get_scores(y, y_predicted)
     # The mean squared error
-    mse = mean_squared_error(y, y_predicted)
+    mse = scores["mse"]
     print(f"Mean squared error: {mse:.2f}")
     # The coefficient of determination: 1 is perfect prediction
-    r2 = r2_score(y, y_predicted)
+    r2 = scores["r2"]
     print(f"Coefficient of determination: {r2:.2f}")
 
     # Plot outputs
@@ -69,5 +79,3 @@ def evaluate(model, X: np.array, y: np.array, y_predicted: np.array) -> float:
         print("****** Success ******")
     else:
         print("****** Failed ******")
-
-    return r2
