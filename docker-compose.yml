@@ -7,6 +7,19 @@ services:
     volumes:
       - ".:/app/"
 
+  train:
+    # command: tail -F keep_alive
+    build:
+      context: "."
+      target: "web"
+    command: python ml_e2e/train.py
+    environment:
+      MLFLOW_SERVER_HOST: "http://mlflow:5000"
+    volumes:
+      - ".:/app/"
+    networks:
+      - ml_e2e
+
   web:
     build:
       context: "."
@@ -26,6 +39,8 @@ services:
     # command: tail -F keep_alive
     volumes:
       - ".:/app/"
+    networks:
+      - ml_e2e
 
   mlflow:
     build:
@@ -35,3 +50,9 @@ services:
       - "5000:5000"
     volumes:
       - ".:/app/"
+    networks:
+      - ml_e2e
+
+networks:
+  ml_e2e:
+    driver: bridge

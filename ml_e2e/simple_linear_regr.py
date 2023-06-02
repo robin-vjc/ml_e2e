@@ -9,7 +9,7 @@ from sklearn.metrics import mean_squared_error
 from ml_e2e.utils import ARTIFACTS_PATH, evaluate, generate_data, get_scores
 
 
-class SimpleLinearRegression():
+class SimpleLinearRegression:
     def __init__(self, iterations: int = 15000, lr: float = 0.1):
         """
         A linear regression model trained with SGD.

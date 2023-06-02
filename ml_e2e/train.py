@@ -10,7 +10,7 @@ from ml_e2e.utils import generate_data, get_scores
 def train_model():
     X_train, y_train, X_test, y_test = generate_data()
 
-    mlflow_host = os.getenv("MLFLOW_SERVER", "http://localhost:5000")
+    mlflow_host = os.getenv("MLFLOW_SERVER_HOST", "http://localhost:5000")
     mlflow.set_tracking_uri(mlflow_host)
 
     with mlflow.start_run() as run:
@@ -46,11 +46,9 @@ def train_model():
 
             # get registered version and promote to prod
             client = mlflow.tracking.MlflowClient()
-            latest_version = client.get_latest_versions(reg_model_name)[0].version
+            latest_version = client.get_latest_versions(reg_model_name)[-1].version
             client.transition_model_version_stage(
-                name=reg_model_name,
-                version=latest_version,
-                stage="Production"
+                name=reg_model_name, version=latest_version, stage="Production"
             )
 
 

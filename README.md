@@ -32,12 +32,15 @@ Run tests (includes detection of linting issues)
 docker-compose run test
 ```
 
+### Run inference
 Start stack (flask server has autoreload)
 ```bash
-docker-compose up web
+docker-compose up web -d
 ```
+You can verify that the stack is running by checking the status of the flask server on `http://localhost:8000/health`, 
+while the mlflow server is on `http://localhost:5000/`.
 
-Check that the stack is working correctly by requesting a prediction
+You can also verify that the stack is working correctly by requesting a prediction
 ```python
 import requests
 
@@ -51,6 +54,16 @@ X_request = {'X': [0.2, 0.5, -0.1]}
 r = requests.post("http://localhost:8000/batch", json=X_request)
 print(r.json())
 ```
+
+### Run training
+While the stack is running (we need MLFlow up to log models and metrics), training can be run as follows
+```bash
+docker-compose run train
+```
+a new model will be trained and if performance checks pass, the model will be promoted to production:
+![mlflow_ui.png](docs/img/mlflow_ui.png)
+Model Registry:
+![mlflow_model_registry.png](docs/img/mlflow_model_registry.png)
 
 
 ## Running locally (no docker)
@@ -87,8 +100,7 @@ Phase I:
  
 Phase II: MLFlow
 
-- [ ] training stores params, scores and artifacts (train/test sets, and plots) using mlflow
-   * should be able to remove all print statements
-- [ ] store model and create simple logic to upgrade it to production on training success
+- [x] training stores params, scores and artifacts (train/test sets, and plots) using mlflow
+- [x] store model and create simple logic to upgrade it to production on training success
 - [ ] flask model loads current production model if ml server reachable; some local weights if not
-- [ ] add mlflow model server to docker-compose
+- [x] add mlflow model server to docker-compose
