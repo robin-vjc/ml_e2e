@@ -1,6 +1,7 @@
 import json
 import os
 import time
+from typing import Union
 
 import mlflow
 import numpy as np
@@ -117,6 +118,8 @@ class SimpleLinearRegression:
 
 
 class SLRWrapper(mlflow.pyfunc.PythonModel):
+    """A wrapper for the SimpleLinearModel that can be stored as a MLFlow model."""
+
     def __init__(self, slr_model: SimpleLinearRegression):
         self.model = slr_model
 
@@ -134,3 +137,28 @@ if __name__ == "__main__":
 
     if scores["r2"] >= 0.4:
         model.save_weights()
+
+
+def load_model() -> Union[SimpleLinearRegression, SLRWrapper]:
+    """
+    Attempts to load the model from the MLServer, reverts to a local version if that fails.
+    """
+    model_served = os.getenv("MODEL_SERVED", "local")
+
+    if model_served == "local":
+        print("Loading SimpleLinearRegression model from local artifacts...")
+        loaded_model = SimpleLinearRegression()
+        loaded_model.load_weights()
+    elif model_served == "mlflow":
+        print("Loading SimpleLinearRegression model from MLFlow server...")
+        mlflow_host = os.getenv("MLFLOW_SERVER_HOST", "http://localhost:5000")
+        mlflow.set_tracking_uri(mlflow_host)
+        reg_model_name = "SimpleLinearRegression"
+        model_uri = f"models:/{reg_model_name}/Production"
+        loaded_model = mlflow.pyfunc.load_model(model_uri)
+    else:
+        raise ValueError(
+            "Unrecognized model to serve; should be either 'local' or 'mlflow'."
+        )
+
+    return loaded_model

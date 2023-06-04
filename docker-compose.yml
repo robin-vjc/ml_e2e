@@ -1,6 +1,5 @@
 services:
   test:
-    # command: tail -F keep_alive
     build:
       context: "."
       target: "test"
@@ -8,7 +7,6 @@ services:
       - ".:/app/"
 
   train:
-    # command: tail -F keep_alive
     build:
       context: "."
       target: "web"
@@ -27,6 +25,9 @@ services:
     image: ghcr.io/robin-vjc/endeavour_e2e_ml
     depends_on:
       - mlflow
+    environment:
+      MLFLOW_SERVER_HOST: "http://mlflow:5000"
+      MODEL_SERVED: "local"  # mlflow
     healthcheck:
       test: "curl localhost:8000/health"
       interval: "60s"
@@ -36,7 +37,6 @@ services:
     ports:
       - "8000:8000"
     tty: true
-    # command: tail -F keep_alive
     volumes:
       - ".:/app/"
     networks:

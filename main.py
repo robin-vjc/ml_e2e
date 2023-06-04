@@ -1,16 +1,14 @@
 import numpy as np
 from flask import Flask, request
 
-from ml_e2e.simple_linear_regr import SimpleLinearRegression
+from ml_e2e.simple_linear_regr import load_model
 
 app = Flask(__name__)
+model = load_model()
 
 
 @app.route("/stream", methods=["POST"])
 def stream():
-    model = SimpleLinearRegression()
-    model.load_weights()
-
     X_req = request.json["X"]
     X_req = np.array([[X_req]])
 
@@ -21,9 +19,6 @@ def stream():
 
 @app.route("/batch", methods=["POST"])
 def batch():
-    model = SimpleLinearRegression()
-    model.load_weights()
-
     X_req = request.json["X"]
     X_req = np.array([X_req])
     y_pred = model.predict(X_req)

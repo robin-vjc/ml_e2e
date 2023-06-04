@@ -25,6 +25,9 @@ def train_model():
         mlflow.log_param("iterations", iterations)
         mlflow.log_param("lr", lr)
         mlflow.log_metrics(scores)
+        # Don't log losses, it's too slow.
+        # for loss in model.losses:
+        #     mlflow.log_metric("training_loss", loss)
 
         if performance_check(scores):
             model_path = f"slr-{run.info.run_uuid}"
