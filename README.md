@@ -2,7 +2,7 @@
 
 ## System Design
 
-* Training observability is ensured through experiment tracking using MLFlow
+* Model observability (training, lineage, deployment staging) is ensured via tracking with MLFlow
 * Training can be triggered either manually (developers running code locally) or by CI pipeline
 * The model is served by a custom flask server instead of relying on `mlflow serve`, to ensure that
   1. appropriate security could easily be added to the project if this service was to face the public internet
@@ -12,7 +12,6 @@
   * No k8s deployment. We push images to Github's registry in CI though, which facilitates deployment to k8s
   * No model staging (we promote directly to prod if performance checks pass); we would usually set a model to staging, test its performance by serving a small fraction of clients (1%) using a load balancer, which we'd gradually increase (5%, 10% etc). Once we are sure there are no problems (performance regressions, crashes, systems overloads etc..) we'd promote to prod.
   * Artifacts are stored on the local FS. We'd usually set up a remote MLFlow server with artifacts stored in s3
-  * Proper logging implementation instead of print
 
 
 ### Training Pipeline
@@ -22,7 +21,7 @@
 ![inference.png](docs/img/inference.png)
 
 
-## Running locally (docker)
+## Running for local dev (docker)
 
 Build the project images:
 ```bash
@@ -74,7 +73,7 @@ Model Registry:
 ![mlflow_model_registry.png](docs/img/mlflow_model_registry.png)
 
 
-## Running locally (no docker)
+## Running for local dev (no docker)
 
 It is recommended to work with the docker setup above. However, it is possible to install this project as an editable 
 package for quick local iterations:
@@ -88,10 +87,10 @@ A production image is created as part of CI/CD. We have 2 deployment options.
 
 **Option 1**: run using locally stored weights:
 ```bash
-docker 
+docker run -e MODEL_SERVED=local -p 8000:8000 --rm ghcr.io/robin-vjc/endeavour_e2e_ml:latest
 ```
 
-**Option 2**: a running MLFlow server is available and the most recent production model can be loaded from it:
+**Option 2**: a running MLFlow server is available (adjust hostname in the command accordingly) and the most recent production model can be loaded from it:
 ```bash
-docker
+docker run -e MODEL_SERVED=mlflow -e MLFLOW_SERVER_HOST=http://mlflow:5000 --network=ml_e2e_ml_e2e -p 8000:8000 --rm ghcr.io/robin-vjc/endeavour_e2e_ml:latest
 ```

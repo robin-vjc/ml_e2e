@@ -20,7 +20,7 @@
 4. CI
 - [x] make project pip installable
 - [x] add github actions CI pipeline [run tests; build image]
-- [ ] add deployment instructions (just pull image)
+- [x] add deployment instructions (just pull image)
  
 ## Phase II: MLFlow
 
