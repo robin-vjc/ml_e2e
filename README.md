@@ -3,8 +3,10 @@
 ## System Design
 
 * Model observability (training, lineage, deployment staging, ...) is ensured via tracking with MLFlow
-* The Github CI/CD pipeline runs tests on PR/merge to master, and on success pushes the image of the inference server to Github's registry, see the [packages](https://github.com/robin-vjc/ml_e2e/pkgs/container/endeavour_e2e_ml) 
+* The Github CI/CD pipeline runs tests on PR/merge to master, and on success pushes the image of the inference server to Github's registry, see the [packages](https://github.com/robin-vjc/ml_e2e/pkgs/container/endeavour_e2e_ml)
 * Training is triggered manually (developers running code locally), and could be added to CI
+  * if training computations could not fit/would take too long on a laptop, and had to be run on k8s (for instance if we had to scan a large grid of hyperparameters), then we'd add a cli.py that accepts such hyperparams and we could trigger the necessary runs in parallel
+* Inference server has to modes: 1) use locally stored weights, or 2) fetch model weights from a mlflow server
 * The model is served by a custom flask server instead of relying on `mlflow serve`, to ensure that
   1. appropriate security could easily be added to the project if this service was to face the public internet
   2. we can adhere to the required API specification (`/stream` and `/batch`)
