@@ -1,4 +1,9 @@
-# Endeavour: ML End-to-End
+# Blueprint for ML Projects
+
+This blueprint for ML projects entails various pieces that are usually required:
+* MLFlow experiment tracking
+* MLFlow model tracking and staging
+* CI pipeline
 
 ## System Design
 

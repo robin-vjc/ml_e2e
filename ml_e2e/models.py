@@ -10,7 +10,7 @@ from sklearn.metrics import mean_squared_error
 from ml_e2e.utils import ARTIFACTS_PATH, evaluate, generate_data, get_scores
 
 
-class SimpleLinearRegression:
+class LinearRegression:
     def __init__(self, iterations: int = 15000, lr: float = 0.1):
         """
         A linear regression model trained with SGD.
@@ -120,7 +120,7 @@ class SimpleLinearRegression:
 class SLRWrapper(mlflow.pyfunc.PythonModel):
     """A wrapper for the SimpleLinearModel that can be stored as a MLFlow model."""
 
-    def __init__(self, slr_model: SimpleLinearRegression):
+    def __init__(self, slr_model: LinearRegression):
         self.model = slr_model
 
     def predict(self, context, model_input) -> np.array:
@@ -129,7 +129,7 @@ class SLRWrapper(mlflow.pyfunc.PythonModel):
 
 if __name__ == "__main__":
     X_train, y_train, X_test, y_test = generate_data()
-    model = SimpleLinearRegression()
+    model = LinearRegression()
     model.fit(X_train, y_train)
     predicted = model.predict(X_test)
     evaluate(model, X_test, y_test, predicted)
@@ -139,7 +139,7 @@ if __name__ == "__main__":
         model.save_weights()
 
 
-def load_model() -> Union[SimpleLinearRegression, SLRWrapper]:
+def load_model() -> Union[LinearRegression, SLRWrapper]:
     """
     Attempts to load the model from the MLServer, reverts to a local version if that fails.
     """
@@ -147,7 +147,7 @@ def load_model() -> Union[SimpleLinearRegression, SLRWrapper]:
 
     if model_served == "local":
         print("Loading SimpleLinearRegression model from local artifacts...")
-        loaded_model = SimpleLinearRegression()
+        loaded_model = LinearRegression()
         loaded_model.load_weights()
     elif model_served == "mlflow":
         print("Loading SimpleLinearRegression model from MLFlow server...")
